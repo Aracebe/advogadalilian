@@ -105,6 +105,7 @@ section { padding: 90px 0; overflow: hidden; }
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    /* Largura definida por JS */
 }
 .slide-1 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://github.com/Aracebe/advogadalilian/blob/content/photo01.webp?raw=true'); }
 .slide-2 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://github.com/Aracebe/advogadalilian/blob/content/photo02.webp?raw=true'); }
