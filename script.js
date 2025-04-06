@@ -48,6 +48,12 @@ if (sliderContainer) {
     let slideInterval;
     let visualSlideIndex = 1;
 
+    // --- Variáveis para Swipe ---
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let isSwiping = false;
+    const swipeThreshold = 50; // Mínimo de pixels para considerar swipe
+
     function hideControls() {
          if (nextBtn) nextBtn.style.display = 'none';
          if (prevBtn) prevBtn.style.display = 'none';
@@ -55,46 +61,48 @@ if (sliderContainer) {
     }
 
     function setupSlider() {
-          slidesWrapper.querySelectorAll('.slide-clone').forEach(clone => clone.remove());
-          dotsContainer.innerHTML = '';
-          if (slideInterval) clearInterval(slideInterval);
+        slidesWrapper.querySelectorAll('.slide-clone').forEach(clone => clone.remove());
+        dotsContainer.innerHTML = '';
+        if (slideInterval) clearInterval(slideInterval);
 
-          originalSlides = Array.from(slidesWrapper.children);
-          totalRealSlides = originalSlides.length;
+        originalSlides = Array.from(slidesWrapper.children); // Re-read after cleanup
+        totalRealSlides = originalSlides.length;
 
-          if (totalRealSlides <= 1) {
-              hideControls();
-              return false;
-          }
+        if (totalRealSlides <= 1) {
+            hideControls();
+            return false; // Indicate setup was not completed
+        }
 
-          const firstClone = originalSlides[0].cloneNode(true);
-          firstClone.classList.add('slide-clone');
-          const lastClone = originalSlides[totalRealSlides - 1].cloneNode(true);
-          lastClone.classList.add('slide-clone');
+        // --- Clones ---
+        const firstClone = originalSlides[0].cloneNode(true);
+        firstClone.classList.add('slide-clone');
+        const lastClone = originalSlides[totalRealSlides - 1].cloneNode(true);
+        lastClone.classList.add('slide-clone');
+        slidesWrapper.appendChild(firstClone);
+        slidesWrapper.insertBefore(lastClone, originalSlides[0]);
 
-          slidesWrapper.appendChild(firstClone);
-          slidesWrapper.insertBefore(lastClone, originalSlides[0]);
+        // --- Dimensões ---
+        const allSlides = slidesWrapper.querySelectorAll('.slide');
+        const totalVisualSlides = allSlides.length;
+        const slideWidthPercentage = 100 / totalVisualSlides;
+        slidesWrapper.style.width = `${totalVisualSlides * 100}%`;
+        allSlides.forEach(slide => {
+            slide.style.width = `${slideWidthPercentage}%`;
+        });
 
-          const allSlides = slidesWrapper.querySelectorAll('.slide');
-          const totalVisualSlides = allSlides.length;
-          const slideWidthPercentage = 100 / totalVisualSlides;
+        // --- Posição Inicial ---
+        visualSlideIndex = 1;
+        currentSlideIndex = 0;
+        slidesWrapper.style.transition = 'none';
+        slidesWrapper.style.transform = `translateX(-${visualSlideIndex * slideWidthPercentage}%)`;
+        void slidesWrapper.offsetWidth;
+        slidesWrapper.style.transition = 'transform 0.7s ease-in-out';
 
-          slidesWrapper.style.width = `${totalVisualSlides * 100}%`;
-          allSlides.forEach(slide => {
-              slide.style.width = `${slideWidthPercentage}%`;
-          });
-
-          visualSlideIndex = 1;
-          currentSlideIndex = 0;
-          slidesWrapper.style.transition = 'none';
-          slidesWrapper.style.transform = `translateX(-${visualSlideIndex * slideWidthPercentage}%)`;
-          void slidesWrapper.offsetWidth;
-          slidesWrapper.style.transition = 'transform 0.7s ease-in-out';
-
-          createDots();
-          updateDots();
-          startInterval();
-          return true;
+        // --- Controles e Autoplay ---
+        createDots();
+        updateDots(); // Define estado inicial dos dots
+        startInterval();
+        return true; // Indicate setup completed
     }
 
     function createDots() {
@@ -110,6 +118,7 @@ if (sliderContainer) {
     }
 
     function updateDots() {
+         // Chamar esta função imediatamente atualiza qual dot está ativo
          const dots = dotsContainer.querySelectorAll('.slider-dot');
          dots.forEach((dot, i) => {
              dot.classList.toggle('active', i === currentSlideIndex);
@@ -120,7 +129,8 @@ if (sliderContainer) {
           if (isTransitioning) return;
           const targetIndex = parseInt(e.target.dataset.index);
           if (targetIndex === currentSlideIndex) return;
-          currentSlideIndex = targetIndex;
+          currentSlideIndex = targetIndex; // Atualiza o índice ANTES
+          updateDots(); // Atualiza os dots IMEDIATAMENTE
           visualSlideIndex = currentSlideIndex + 1;
           moveSlider(true);
           resetInterval();
@@ -142,12 +152,13 @@ if (sliderContainer) {
                   slidesWrapper.style.transition = 'transform 0.7s ease-in-out';
                }, 50);
           }
-
-          if (withAnimation) updateDots();
+          // updateDots() foi movido para ser chamado imediatamente nos handlers
     }
 
     function handleNext() {
         if (isTransitioning) return;
+        currentSlideIndex = (currentSlideIndex + 1) % totalRealSlides; // Calcula próximo índice ANTES
+        updateDots(); // Atualiza dots IMEDIATAMENTE
         visualSlideIndex++;
         moveSlider(true);
         resetInterval();
@@ -155,30 +166,42 @@ if (sliderContainer) {
 
     function handlePrev() {
         if (isTransitioning) return;
+        currentSlideIndex = (currentSlideIndex - 1 + totalRealSlides) % totalRealSlides; // Calcula índice anterior ANTES
+        updateDots(); // Atualiza dots IMEDIATAMENTE
         visualSlideIndex--;
         moveSlider(true);
         resetInterval();
     }
 
+    // --- Lógica de Loop (Transition End) ---
     slidesWrapper.addEventListener('transitionend', () => {
+          // Só processa se foi uma transição que iniciamos
           if (!isTransitioning) return;
+
           const totalVisualSlides = slidesWrapper.children.length;
 
+          // Chegou no clone esquerdo?
           if (visualSlideIndex <= 0) {
-              visualSlideIndex = totalRealSlides;
-              currentSlideIndex = totalRealSlides - 1;
-              moveSlider(false);
-          } else if (visualSlideIndex >= totalVisualSlides - 1) {
-              visualSlideIndex = 1;
-              currentSlideIndex = 0;
-              moveSlider(false);
-          } else {
-               currentSlideIndex = visualSlideIndex - 1;
-               isTransitioning = false;
+              visualSlideIndex = totalRealSlides; // Salta para o último real
+              currentSlideIndex = totalRealSlides - 1; // Ajusta índice real
+              moveSlider(false); // Salta sem animação (isTransitioning será resetado no timeout)
           }
-         updateDots();
+          // Chegou no clone direito?
+          else if (visualSlideIndex >= totalVisualSlides - 1) {
+              visualSlideIndex = 1; // Salta para o primeiro real
+              currentSlideIndex = 0; // Ajusta índice real
+              moveSlider(false); // Salta sem animação (isTransitioning será resetado no timeout)
+          }
+          // Se não pousou em clone, a transição normal acabou
+          else {
+              isTransitioning = false; // Permite próximo movimento
+              // currentSlideIndex já foi atualizado no handleNext/Prev/DotClick
+          }
+          // Confirma o estado dos dots após qualquer movimento ou salto
+          updateDots();
     });
 
+    // --- Autoplay ---
     function startInterval() {
         stopInterval();
         slideInterval = setInterval(() => {
@@ -188,20 +211,72 @@ if (sliderContainer) {
             }
         }, 6000);
     }
-
     function stopInterval() {
          if (slideInterval) {
              clearInterval(slideInterval);
              slideInterval = null;
          }
     }
-
     function resetInterval() {
           stopInterval();
           startInterval();
     }
 
-    // --- Initial Setup & Listeners ---
+    // --- Lógica de Swipe ---
+    function handleTouchStart(event) {
+        if (isTransitioning) return; // Não começa swipe se animando
+        touchStartX = event.touches[0].clientX;
+        touchEndX = touchStartX; // Reseta endX
+        isSwiping = true;
+        // Pausa autoplay enquanto o dedo está na tela
+        stopInterval();
+        // Remove transição temporariamente para feedback instantâneo (opcional)
+        // slidesWrapper.style.transition = 'none';
+    }
+
+    function handleTouchMove(event) {
+        if (!isSwiping || isTransitioning) return;
+        touchEndX = event.touches[0].clientX;
+        // Opcional: Mover o slide junto com o dedo (feedback)
+        // const currentTranslate = -visualSlideIndex * (100 / slidesWrapper.children.length);
+        // const diff = touchEndX - touchStartX;
+        // const percentageDiff = (diff / slidesWrapper.offsetWidth) * 100;
+        // slidesWrapper.style.transform = `translateX(${currentTranslate + percentageDiff}%)`;
+    }
+
+    function handleTouchEnd() {
+        if (!isSwiping || isTransitioning) return;
+        isSwiping = false;
+        const diff = touchStartX - touchEndX; // Positivo se swipe para esquerda (next), negativo se para direita (prev)
+
+        // Verifica se o swipe foi longo o suficiente
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) { // Swipe para esquerda
+                handleNext();
+            } else { // Swipe para direita
+                handlePrev();
+            }
+        } else {
+            // Se não foi swipe, restaura a posição (caso tenha movido no touchmove)
+            // moveSlider(true); // Ou apenas reativa o intervalo
+            startInterval(); // Se não houve swipe, apenas retoma autoplay
+        }
+        // Reativa transição caso tenha sido desativada no touchstart/move
+        // slidesWrapper.style.transition = 'transform 0.7s ease-in-out';
+    }
+
+    // Adiciona os listeners de toque
+    // Use { passive: true } onde não precisar de preventDefault
+    slidesWrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
+    slidesWrapper.addEventListener('touchmove', handleTouchMove, { passive: true }); // Se adicionar feedback com transform, pode precisar de passive: false e preventDefault
+    slidesWrapper.addEventListener('touchend', handleTouchEnd);
+    slidesWrapper.addEventListener('touchcancel', () => { // Reseta se o toque for cancelado
+        isSwiping = false;
+        startInterval(); // Retoma autoplay
+    });
+
+
+    // --- Initial Setup & Click Listeners ---
     if (setupSlider()) {
           nextBtn.addEventListener('click', handleNext);
           prevBtn.addEventListener('click', handlePrev);
