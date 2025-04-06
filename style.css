@@ -7,7 +7,7 @@
     --color-text-header: #1a1a1a;
     --color-section-alt: #f9f9f9;
     --container-width: 1250px;
-    --header-height: 90px; /* Pode precisar ajustar ligeiramente se o header ficar mais alto */
+    --header-height: 90px;
     --font-primary: 'Montserrat', sans-serif;
     --font-secondary: 'EB Garamond', serif;
 }
@@ -89,7 +89,7 @@ section { padding: 90px 0; overflow: hidden; }
 .footer-logo-container {
     display: block;
     max-width: 55px;
-    margin-bottom: 15px; /* Alinha à esquerda por padrão */
+    margin-bottom: 15px; /* Align left by default */
 }
 /* --- FIM LOGO STYLES --- */
 
@@ -105,14 +105,13 @@ section { padding: 90px 0; overflow: hidden; }
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    /* Largura definida por JS */
 }
 .slide-1 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://github.com/Aracebe/advogadalilian/blob/content/photo01.webp?raw=true'); }
 .slide-2 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://github.com/Aracebe/advogadalilian/blob/content/photo02.webp?raw=true'); }
 .slide-3 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://github.com/Aracebe/advogadalilian/blob/content/photo03.webp?raw=true'); }
 .slide-content { color: var(--color-text-light); text-align: center; max-width: 850px; width: 90%; padding: 25px; background: rgba(0, 0, 0, 0.65); border-radius: 8px; position: relative; z-index: 3; }
 .slide-content h1 {
-    font-family: var(--font-primary); /* Fonte Montserrat */
+    font-family: var(--font-primary);
     font-size: 3rem;
     margin-bottom: 0.6em;
     color: var(--color-text-light);
@@ -148,8 +147,24 @@ section { padding: 90px 0; overflow: hidden; }
 /* --- SOBRE --- */
 #sobre { background-color: var(--color-background); padding: 100px 0; }
 .about-content { display: flex; align-items: center; gap: 50px; }
-.about-image { flex: 0 0 35%; max-width: 35%; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; }
-.about-image img { width: 100%; height: auto; object-fit: cover; display: block; }
+.about-image {
+    flex: 0 0 35%;
+    max-width: 35%;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden; /* Mantém o overflow hidden */
+}
+.about-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease; /* Adiciona transição */
+}
+.about-image img:hover {
+    transform: scale(1.05); /* Adiciona efeito de hover */
+}
 .about-text { flex: 1; }
 .about-text .about-name { font-family: var(--font-secondary); font-size: 2.2rem; color: var(--color-primary); margin-bottom: 5px; line-height: 1.2; }
 .about-text .about-title { display: block; font-size: 1.1rem; color: var(--color-secondary); font-family: var(--font-primary); font-weight: 500; margin-bottom: 25px; letter-spacing: 1px; text-transform: uppercase; }
@@ -239,9 +254,11 @@ section { padding: 90px 0; overflow: hidden; }
 @media (max-width: 768px) {
      body { padding-top: calc(var(--header-height) - 20px); }
      .header { height: calc(var(--header-height) - 20px); }
-     .header-logo-container { width: 46px; }
-     .header-name { display: none; }
-     .header-subtitle { display: none; }
+     .container { padding: 0 15px; }
+     .header-logo-container { width: 40px; }
+     .header-brand { gap: 12px; }
+     .header-name { font-size: 1.15rem; }
+     .header-subtitle { font-size: 0.65rem; letter-spacing: 0.5px; }
      .main-nav { position: fixed; top: calc(var(--header-height) - 20px); right: -100%; width: 70%; max-width: 300px; height: calc(100vh - (var(--header-height) - 20px)); background-color: #fff; box-shadow: -5px 0 15px rgba(0,0,0,0.1); transition: right 0.4s ease-in-out; overflow-y: auto; padding-top: 30px; z-index: 1050;}
      .main-nav.nav-active { right: 0; }
      .main-nav ul { flex-direction: column; gap: 0; }
@@ -270,12 +287,13 @@ section { padding: 90px 0; overflow: hidden; }
      section { padding: 70px 0; }
      .area-image { max-width: 90%; height: auto;}
      .area-image img { max-height: 300px; }
-     .area-content { padding: 20px; }
+     .area-content { padding: 20px 15px; }
      .about-image { max-width: 75%; }
      .about-image img { max-height: 330px; }
      .about-text .about-name { font-size: 1.8rem; }
      .blog-preview-grid { grid-template-columns: 1fr; gap: 30px; }
      .post-preview img { height: 200px; }
+     .post-content { padding: 20px 15px; }
      .footer-column { margin-bottom: 30px; }
      .footer-brand-name { font-size: 1.3rem;}
      .footer-column .about-text { max-width: 100%; margin-bottom: 20px;}
@@ -288,6 +306,7 @@ section { padding: 90px 0; overflow: hidden; }
 }
 
  @media (max-width: 480px) {
+      .container { padding: 0 10px; }
       #home { height: 70vh; }
       .slide-content { width: 90%; padding: 15px 10px; }
       .slide-content h1 { font-size: 1.6rem; }
@@ -299,9 +318,15 @@ section { padding: 90px 0; overflow: hidden; }
       .slider-dot.active { width: 22px; }
       h2 { font-size: 1.5rem; }
       h3 { font-size: 1.3rem; }
+      .area-content { padding: 15px 10px; }
+      .post-content { padding: 15px 10px; }
       .about-image { max-width: 80%; }
        .about-image img { max-height: 280px; }
       .about-text .about-name { font-size: 1.6rem; }
+      .header-logo-container { width: 36px; }
+      .header-brand { gap: 10px; }
+      .header-name { font-size: 1rem; }
+      .header-subtitle { font-size: 0.6rem; }
       .footer-logo-container { max-width: 45px; }
       .footer-brand-name { font-size: 1.2rem; }
       .footer-column .about-text { font-size: 0.9rem; }
