@@ -53,7 +53,9 @@ if (sliderContainer) {
     let touchEndX = 0;
     let currentDragOffset = 0; // Para guardar o quanto foi arrastado
     let isSwiping = false;
-    const swipeThreshold = 35; // Você ainda pode ajustar este valor se necessário
+    // --- AJUSTE DE SENSIBILIDADE ---
+    // Aumentado de 35 para 60. Valores maiores exigem um deslize mais longo.
+    const swipeThreshold = 60; // <<-- VALOR ALTERADO AQUI
     const animationDuration = '0.5s';
     const animationEasing = 'ease-out';
 
@@ -270,7 +272,7 @@ if (sliderContainer) {
         // Reativa a transição para o "snap" final
         slidesWrapper.style.transition = `transform ${animationDuration} ${animationEasing}`;
 
-        // Verifica se o swipe foi longo o suficiente
+        // Verifica se o swipe foi longo o suficiente (usando o novo threshold)
         if (Math.abs(currentDragOffset) > swipeThreshold) {
             if (currentDragOffset < 0) { // Swipe para esquerda (negativo) -> Próximo
                 handleNext();
@@ -290,7 +292,7 @@ if (sliderContainer) {
 
     // Adiciona os listeners de toque
     slidesWrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
-    slidesWrapper.addEventListener('touchmove', handleTouchMove, { passive: true }); // Manter passive: true é geralmente ok
+    slidesWrapper.addEventListener('touchmove', handleTouchMove, { passive: true });
     slidesWrapper.addEventListener('touchend', handleTouchEnd);
     slidesWrapper.addEventListener('touchcancel', () => { // Reseta se o toque for cancelado
         if (isSwiping) {
