@@ -199,17 +199,40 @@ section { padding: 90px 0; overflow: hidden; }
 }
 .footer-column .social-heading { margin-bottom: 15px; }
 .footer-contact-list li { margin-bottom: 18px; display: flex; align-items: center; gap: 12px; color: #bbb; font-size: 0.95rem; }
-.footer-contact-list img.icon { width: 20px; height: 20px; flex-shrink: 0; }
 .footer-contact-list a { color: #bbb; word-break: break-word; }
 .footer-contact-list a:hover { color: var(--color-secondary); }
 .quick-links-list li { margin-bottom: 12px; }
 .quick-links-list a { color: #bbb; font-size: 0.95rem; }
 .quick-links-list a:hover { color: var(--color-secondary); padding-left: 5px; transition: padding-left 0.3s ease; }
- .footer-social-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-start; /* Align left */ }
- .footer-social-links a { display: inline-block; transition: transform 0.3s ease; line-height: 0; }
- .footer-social-links a:hover { transform: scale(1.1); }
- .footer-social-links img { width: 24px; height: 24px; filter: invert(87%) sepia(15%) saturate(764%) hue-rotate(348deg) brightness(91%) contrast(85%); transition: filter 0.3s ease; }
- .footer-social-links a:hover img { filter: brightness(0) invert(1); }
+
+/* <<< ÍCONES DO RODAPÉ - Estilo Unificado >>> */
+.footer-social-links img,
+.footer-contact-list img.icon {
+    /* Filtro unificado com brilho aumentado */
+    filter: invert(87%) sepia(15%) saturate(764%) hue-rotate(348deg) brightness(130%) contrast(85%);
+    transition: filter 0.3s ease;
+}
+
+/* Tamanhos específicos (se diferentes) */
+.footer-social-links img {
+    width: 24px;
+    height: 24px;
+}
+.footer-contact-list img.icon {
+     width: 20px;
+     height: 20px;
+     flex-shrink: 0;
+ }
+
+/* Links das redes sociais */
+.footer-social-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-start; }
+.footer-social-links a { display: inline-block; transition: transform 0.3s ease; line-height: 0; }
+.footer-social-links a:hover { transform: scale(1.1); }
+/* Efeito Hover (apenas para ícones sociais sob "Conecte-se") */
+.footer-social-links a:hover img {
+    filter: brightness(0) invert(1); /* Mantém branco no hover */
+}
+
 .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 30px; margin-top: 40px; text-align: center; font-size: 0.9em; color: #aaa; }
 .footer-bottom a { color: var(--color-secondary); }
 .footer-bottom a:hover { text-decoration: underline; }
@@ -299,7 +322,8 @@ section { padding: 90px 0; overflow: hidden; }
      .footer-column .about-text { max-width: 100%; margin-bottom: 20px;}
      .footer-column .social-heading { margin-top: 15px; margin-bottom: 10px;}
      .footer-social-links { margin-top: 0; gap: 10px; }
-     .footer-social-links img { width: 22px; height: 22px;}
+     .footer-social-links img { width: 22px; height: 22px;} /* Mantém tamanho mobile */
+     .footer-contact-list img.icon { width: 18px; height: 18px; } /* Ajusta tamanho mobile para contato */
       .footer-column:nth-child(1) { order: 1;}
       .footer-column:nth-child(3) { order: 2;}
       .footer-column:nth-child(2) { order: 3;}
