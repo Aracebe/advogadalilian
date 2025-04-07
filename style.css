@@ -96,7 +96,13 @@ section { padding: 90px 0; overflow: hidden; }
 /* --- SLIDER --- */
 #home { height: 70vh; min-height: 500px; position: relative; overflow: hidden; padding: 0; background-color: var(--color-primary); }
 .slider-container { height: 100%; position: relative; }
-.slides-wrapper { display: flex; height: 100%; will-change: transform; }
+.slides-wrapper {
+    display: flex;
+    height: 100%;
+    will-change: transform;
+    /* --- CORREÇÃO PARA SWIPE MOBILE --- */
+    touch-action: pan-y; /* Permite o scroll vertical, mas reserva o horizontal para o JS */
+}
 .slide {
     height: 100%;
     background-size: cover;
