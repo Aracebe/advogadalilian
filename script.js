@@ -53,9 +53,9 @@ if (sliderContainer) {
     let touchEndX = 0;
     let currentDragOffset = 0; // Para guardar o quanto foi arrastado
     let isSwiping = false;
-    const swipeThreshold = 35; // <<< AJUSTADO AQUI: Reduzido para maior sensibilidade
-    const animationDuration = '0.5s'; // <<< AJUSTADO AQUI: Duração da animação
-    const animationEasing = 'ease-out'; // <<< AJUSTADO AQUI: Easing
+    const swipeThreshold = 35; // Você ainda pode ajustar este valor se necessário
+    const animationDuration = '0.5s';
+    const animationEasing = 'ease-out';
 
     function hideControls() {
          if (nextBtn) nextBtn.style.display = 'none';
@@ -289,11 +289,8 @@ if (sliderContainer) {
     }
 
     // Adiciona os listeners de toque
-    // Mantemos passive: true para start e end. Para move, se houver problemas
-    // com scroll vertical, pode ser necessário mudar para false e usar event.preventDefault()
-    // mas geralmente não é preciso para sliders horizontais simples.
     slidesWrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
-    slidesWrapper.addEventListener('touchmove', handleTouchMove, { passive: true });
+    slidesWrapper.addEventListener('touchmove', handleTouchMove, { passive: true }); // Manter passive: true é geralmente ok
     slidesWrapper.addEventListener('touchend', handleTouchEnd);
     slidesWrapper.addEventListener('touchcancel', () => { // Reseta se o toque for cancelado
         if (isSwiping) {
