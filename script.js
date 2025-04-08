@@ -1,4 +1,4 @@
- // --- Navegação Mobile ---
+// --- Navegação Mobile ---
 const navToggle = document.getElementById('navToggle');
 const mainNav = document.getElementById('mainNav');
 const body = document.body;
@@ -48,14 +48,7 @@ if (sliderContainer) {
     let slideInterval;
     let visualSlideIndex = 1; // Índice do slide visual (incluindo clones)
 
-    // --- Variáveis para Swipe ---
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let currentDragOffset = 0; // Para guardar o quanto foi arrastado
-    let isSwiping = false;
-    // --- AJUSTE DE SENSIBILIDADE ---
-    // Aumentado de 35 para 60. Valores maiores exigem um deslize mais longo.
-    const swipeThreshold = 60; // <<-- VALOR ALTERADO AQUI
+    // Variáveis padrão do slider (mantidas)
     const animationDuration = '0.5s';
     const animationEasing = 'ease-out';
 
@@ -124,8 +117,8 @@ if (sliderContainer) {
         slidesWrapper.style.transform = `translateX(${getCurrentSlideTargetOffsetPercentage()}%)`;
         // Força o navegador a aplicar a mudança imediatamente
         void slidesWrapper.offsetWidth;
-        // Restaura a transição para futuras animações
-        // (Será restaurada explicitamente quando necessário, ou no final do setup)
+         // Restaura a transição padrão APÓS o posicionamento sem animação
+         slidesWrapper.style.transition = `transform ${animationDuration} ${animationEasing}`;
     }
 
 
@@ -162,7 +155,6 @@ if (sliderContainer) {
     }
 
     function moveSlider(withAnimation = true) {
-          // Não precisa mais de `isTransitioning` aqui, pois será controlado no início e fim
          const targetOffsetPercentage = getCurrentSlideTargetOffsetPercentage();
 
          slidesWrapper.style.transition = withAnimation
@@ -202,32 +194,39 @@ if (sliderContainer) {
 
           // Chegou no clone esquerdo? Salta para o último real
           if (visualSlideIndex <= 0) {
-              visualSlideIndex = totalRealSlides; // Salta para o último real
-              currentSlideIndex = totalRealSlides - 1; // Ajusta índice real
+              visualSlideIndex = totalRealSlides; // Salta para o último real (index do último slide real + 1 pois visualSlideIndex começa em 1)
+              // Atualiza o índice real correspondente
+              currentSlideIndex = totalRealSlides - 1;
               positionSliderWithoutAnimation(); // Salta sem animação
+              updateDots(); // Garante que o dot correto esteja ativo após o salto
           }
           // Chegou no clone direito? Salta para o primeiro real
           else if (visualSlideIndex >= totalVisualSlides - 1) {
               visualSlideIndex = 1; // Salta para o primeiro real
-              currentSlideIndex = 0; // Ajusta índice real
+              // Atualiza o índice real correspondente
+              currentSlideIndex = 0;
               positionSliderWithoutAnimation(); // Salta sem animação
+              updateDots(); // Garante que o dot correto esteja ativo após o salto
           }
 
           // A transição terminou (seja normal ou após um salto sem animação)
           isTransitioning = false; // Permite próximo movimento
-          // Confirma o estado dos dots após qualquer movimento ou salto
-          updateDots();
+          // Confirma o estado dos dots após qualquer movimento ou salto (já feito nos ifs acima, mas redundância segura)
+           // updateDots();
     });
 
     // --- Autoplay ---
     function startInterval() {
-        stopInterval();
-        slideInterval = setInterval(() => {
-            const isHovering = sliderContainer.matches(':hover');
-            if (!isHovering && document.visibilityState === 'visible') {
-               handleNext();
-            }
-        }, 6000);
+        stopInterval(); // Garante que não haja múltiplos intervalos
+        if (totalRealSlides > 1) { // Só inicia autoplay se houver mais de 1 slide
+            slideInterval = setInterval(() => {
+                const isHovering = sliderContainer.matches(':hover');
+                const isTouching = isSwipeInProgress; // Verifica se um toque está em andamento
+                if (!isHovering && !isTouching && document.visibilityState === 'visible') {
+                   handleNext();
+                }
+            }, 6000);
+        }
     }
     function stopInterval() {
          if (slideInterval) {
@@ -240,86 +239,111 @@ if (sliderContainer) {
           startInterval();
     }
 
-    // --- Lógica de Swipe ---
-    function handleTouchStart(event) {
-        if (isTransitioning) return; // Não começa swipe se animando
+    // --- NOVA Lógica de Swipe Mobile ---
+    let touchStartX = 0;
+    let touchStartY = 0; // Para detectar scroll vertical vs swipe
+    let touchEndX = 0;
+    let touchEndY = 0;
+    let isSwipeInProgress = false; // Flag para controlar o estado do swipe
+    const minSwipeDistance = 50; // Distância mínima em pixels para considerar um swipe (ajuste conforme necessário)
+
+    function handleGestureStart(event) {
+        // Não iniciar novo swipe se já estiver animando
+        if (isTransitioning) return;
+
         touchStartX = event.touches[0].clientX;
-        touchEndX = touchStartX; // Reseta endX
-        currentDragOffset = 0; // Reseta o offset do drag atual
-        isSwiping = true;
-        stopInterval(); // Pausa autoplay
-        slidesWrapper.style.transition = 'none'; // <<< IMPORTANTE: Remove transição para feedback imediato
+        touchStartY = event.touches[0].clientY;
+        touchEndX = touchStartX; // Reseta no início
+        touchEndY = touchStartY; // Reseta no início
+        isSwipeInProgress = true; // Marca que um toque começou
+        stopInterval(); // Pausa autoplay durante o toque
+        // Não remover a transição CSS aqui, deixamos o CSS controlar a animação final
     }
 
-    function handleTouchMove(event) {
-        if (!isSwiping || isTransitioning) return;
+    function handleGestureMove(event) {
+        if (!isSwipeInProgress || isTransitioning) return;
+
         touchEndX = event.touches[0].clientX;
-        currentDragOffset = touchEndX - touchStartX; // Calcula a diferença atual do drag
+        touchEndY = event.touches[0].clientY;
 
-        // Calcula a posição atual baseada no slide que estava + o drag
-        const currentTargetOffset = getCurrentSlideTargetOffsetPercentage();
-        // Converte o offset em pixels para porcentagem da LARGURA DO CONTAINER VISÍVEL
-        const dragPercentage = (currentDragOffset / sliderContainer.offsetWidth) * 100;
-
-        // Aplica a transformação em tempo real
-        slidesWrapper.style.transform = `translateX(${currentTargetOffset + dragPercentage}%)`;
+        // Opcional: Adicionar feedback visual durante o arraste (mais complexo)
+        // Por enquanto, focamos apenas na detecção do swipe no final
     }
 
-    function handleTouchEnd() {
-        if (!isSwiping || isTransitioning) return;
-        isSwiping = false;
+    function handleGestureEnd() {
+        if (!isSwipeInProgress) return; // Só processa se um swipe estava realmente em progresso
 
-        // Reativa a transição para o "snap" final
-        slidesWrapper.style.transition = `transform ${animationDuration} ${animationEasing}`;
+        // Não finalizar se ainda estiver em transição (pouco provável, mas seguro)
+        if (isTransitioning) {
+             isSwipeInProgress = false; // Reseta flag mesmo assim
+             resetInterval(); // Tenta reiniciar autoplay
+             return;
+        }
 
-        // Verifica se o swipe foi longo o suficiente (usando o novo threshold)
-        if (Math.abs(currentDragOffset) > swipeThreshold) {
-            if (currentDragOffset < 0) { // Swipe para esquerda (negativo) -> Próximo
-                handleNext();
-            } else { // Swipe para direita (positivo) -> Anterior
-                handlePrev();
+        isSwipeInProgress = false; // Finaliza o estado de swipe AGORA
+
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Verifica se foi um swipe horizontal significativo e não um scroll vertical
+        // E também verifica se o toque final aconteceu (touchEndX não é 0, o que pode acontecer em cancelamentos)
+        if (touchEndX !== 0 && Math.abs(deltaX) > minSwipeDistance && Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Swipe horizontal detectado
+            if (deltaX < 0) {
+                // Swipe para Esquerda (-> Próximo)
+                handleNext(); // handleNext já cuida de isTransitioning e resetInterval
+            } else {
+                // Swipe para Direita (<- Anterior)
+                handlePrev(); // handlePrev já cuida de isTransitioning e resetInterval
             }
         } else {
-            // Se não foi swipe longo, anima de volta para a posição original
-            isTransitioning = true; // Marca como transição para o listener 'transitionend'
-            moveSlider(true); // Anima de volta para a posição correta do visualSlideIndex atual
-            startInterval(); // Retoma autoplay se não houve mudança de slide
+            // Não foi um swipe válido ou foi mais vertical, apenas reinicia o autoplay
+            resetInterval();
         }
 
-        // Reseta o offset do drag para segurança
-        currentDragOffset = 0;
+        // Reseta coordenadas para segurança, independentemente de ter sido swipe ou não
+        touchStartX = 0;
+        touchStartY = 0;
+        touchEndX = 0;
+        touchEndY = 0;
     }
 
-    // Adiciona os listeners de toque
-    slidesWrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
-    slidesWrapper.addEventListener('touchmove', handleTouchMove, { passive: true });
-    slidesWrapper.addEventListener('touchend', handleTouchEnd);
+    // Adiciona os novos listeners de toque ao wrapper dos slides
+    // Usamos passive: true para melhor performance, pois não vamos prevenir o scroll padrão agressivamente aqui
+    slidesWrapper.addEventListener('touchstart', handleGestureStart, { passive: true });
+    slidesWrapper.addEventListener('touchmove', handleGestureMove, { passive: true });
+    slidesWrapper.addEventListener('touchend', handleGestureEnd);
     slidesWrapper.addEventListener('touchcancel', () => { // Reseta se o toque for cancelado
-        if (isSwiping) {
-            isSwiping = false;
-            // Anima de volta à posição original se o toque foi cancelado no meio do drag
-            slidesWrapper.style.transition = `transform ${animationDuration} ${animationEasing}`;
-            isTransitioning = true;
-            moveSlider(true);
-            startInterval();
+        if (isSwipeInProgress) {
+            isSwipeInProgress = false;
+            resetInterval(); // Reinicia autoplay se o toque foi cancelado
+            // Reseta coordenadas também no cancelamento
+             touchStartX = 0;
+             touchStartY = 0;
+             touchEndX = 0;
+             touchEndY = 0;
         }
     });
+    // --- FIM da NOVA Lógica de Swipe Mobile ---
 
 
     // --- Initial Setup & Click Listeners ---
-    if (setupSlider()) {
+    if (setupSlider()) { // Só adiciona listeners se o setup foi bem sucedido (mais de 1 slide)
           nextBtn.addEventListener('click', handleNext);
           prevBtn.addEventListener('click', handlePrev);
+          // Listeners de mouse/foco para pausar autoplay
           sliderContainer.addEventListener('mouseenter', stopInterval);
           sliderContainer.addEventListener('mouseleave', startInterval);
-          sliderContainer.addEventListener('focusin', stopInterval);
-          sliderContainer.addEventListener('focusout', startInterval);
+          sliderContainer.addEventListener('focusin', stopInterval); // Pausa se um elemento dentro ganhar foco (ex: botão)
+          sliderContainer.addEventListener('focusout', startInterval); // Retoma se o foco sair do container
+
+          // Listener para visibilidade da aba
           document.addEventListener('visibilitychange', () => {
              if (document.visibilityState === 'hidden') {
                  stopInterval();
-             } else if (!sliderContainer.matches(':hover')) {
+             } else if (!sliderContainer.matches(':hover') && !isSwipeInProgress) { // Só retoma se não estiver hover E não estiver tocando
                  startInterval();
              }
          });
     }
-}
+} // Fim do if (sliderContainer)
