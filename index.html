@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Link para o arquivo CSS externo (nome corrigido) -->
+    <!-- Link para o arquivo CSS externo -->
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -19,7 +19,7 @@
     <header class="header">
         <div class="container">
             <div class="header-brand">
-                 <a href="#home" class="logo-link header-logo-container">
+                 <a href="#home" class="logo-link header-logo-container"> <!-- Link interno na Index -->
                     <img src="https://github.com/Aracebe/advogadalilian/blob/content/logo_gold.svg?raw=true" alt="Lilian R. Paoliello Logo" class="logo-image">
                  </a>
                  <div class="header-title-group">
@@ -28,7 +28,13 @@
                 </div>
             </div>
             <nav class="main-nav" id="mainNav">
-                 <ul> <li><a href="#home">Início</a></li> <li><a href="#area-execucao-penal">Atuação</a></li> <li><a href="#sobre">Quem Sou</a></li> <li><a href="#blog">Blog</a></li> <li><a href="#contato">Contato</a></li> </ul>
+                 <ul>
+                     <li><a href="#home">Início</a></li> {/* Links Internos */}
+                     <li><a href="#area-execucao-penal">Atuação</a></li>
+                     <li><a href="#sobre">Quem Sou</a></li>
+                     <li><a href="blog.html">Blog</a></li> {/* Link para outra página */}
+                     <li><a href="#contato">Contato</a></li> {/* Link Interno */}
+                 </ul>
             </nav>
             <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
         </div>
@@ -37,7 +43,7 @@
     <main>
         <!-- Seção Home/Slider -->
         <section id="home">
-            <div class="slider-container">
+            <div class="slider-container"> {/* Este container é necessário para o JS do slider funcionar */}
                  <div class="slides-wrapper">
                     <div class="slide slide-1"> <div class="slide-content"> <h1>Assessoria Jurídica Especializada</h1> <p>Compromisso, ética e excelência na defesa dos seus direitos.</p> <a href="https://wa.me/5519991981472?text=Olá,%20gostaria%20de%20mais%20informações%20sobre%20assessoria%20jurídica." target="_blank" class="btn">Fale Comigo Pelo WhatsApp</a> </div> </div>
                     <div class="slide slide-2"> <div class="slide-content"> <h1>Consultoria Estratégica em Licitações</h1> <p>Navegue com segurança e maximize suas oportunidades em processos licitatórios.</p> <a href="#area-licitacoes" class="btn">Saiba Mais</a> </div> </div>
@@ -100,7 +106,7 @@
             <div class="container">
                  <h2 class="text-center">A Advogada</h2>
                 <div class="about-content">
-                    <div class="about-image"> <!-- Container da Imagem Sobre -->
+                    <div class="about-image">
                         <img src="https://github.com/Aracebe/advogadalilian/blob/content/fotoperfil.webp?raw=true" alt="Foto de Lilian R. Paoliello">
                     </div>
                     <div class="about-text">
@@ -115,39 +121,42 @@
             </div>
         </section>
 
-        <!-- Seção Blog -->
+        <!-- Seção Blog Preview -->
         <section id="blog">
             <div class="container">
                 <h2 class="text-center">Blog & Notícias</h2>
                 <p class="text-center" style="max-width: 800px; margin-left: auto; margin-right: auto; margin-bottom: 50px; color: #555;">Artigos, insights e atualizações sobre o universo jurídico.</p>
                 <div class="blog-preview-grid">
+                    {/* <!-- Post 1 Preview --> */}
                     <article class="post-preview">
                         <img src="https://github.com/Aracebe/advogadalilian/blob/content/photo01.webp?raw=true" alt="Mãos digitando em um teclado de laptop com documentos legais ao fundo">
                         <div class="post-content">
                             <h4>Entendendo a Progressão de Regime na Execução Penal</h4>
                             <p>Descubra os requisitos legais, os prazos e como a defesa técnica pode ser crucial para garantir esse direito.</p>
-                            <a href="blog.html#post1" class="read-more-link">Leia Mais →</a>
+                            <a href="entendendo-progressao-regime.html" class="read-more-link">Leia Mais →</a> {/* <<< Link Atualizado */}
                         </div>
                     </article>
+                    {/* <!-- Post 2 Preview --> */}
                     <article class="post-preview">
                         <img src="https://github.com/Aracebe/advogadalilian/blob/content/photo02.webp?raw=true" alt="Pessoas em uma reunião analisando gráficos e documentos sobre uma mesa">
                         <div class="post-content">
                             <h4>A Importância da Consultoria em Licitações para Empresas</h4>
                             <p>Veja como uma assessoria especializada pode evitar erros, otimizar propostas e aumentar suas chances de sucesso.</p>
-                            <a href="blog.html#post2" class="read-more-link">Leia Mais →</a>
+                            <a href="importancia-consultoria-licitacoes.html" class="read-more-link">Leia Mais →</a> {/* <<< Link Atualizado */}
                         </div>
                     </article>
+                    {/* <!-- Post 3 Preview --> */}
                     <article class="post-preview">
                         <img src="https://github.com/Aracebe/advogadalilian/blob/content/photo03.webp?raw=true" alt="Martelo de juiz sobre livros de direito em uma mesa de madeira escura">
                         <div class="post-content">
                             <h4>PAD: Como se Defender de um Processo Administrativo?</h4>
                             <p>Conheça as principais etapas, seus direitos como servidor e a importância de uma defesa técnica qualificada.</p>
-                            <a href="blog.html#post3" class="read-more-link">Leia Mais →</a>
+                            <a href="como-defender-se-pad.html" class="read-more-link">Leia Mais →</a> {/* <<< Link Atualizado */}
                         </div>
                     </article>
                 </div>
                 <div class="view-all-blog">
-                    <a href="blog.html" class="btn">Ver Todas as Publicações</a>
+                    <a href="blog.html" class="btn">Ver Todas as Publicações</a> {/* <<< Link Atualizado */}
                 </div>
             </div>
         </section>
@@ -157,7 +166,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
-                     <a href="#home" class="logo-link footer-logo-container">
+                     <a href="#home" class="logo-link footer-logo-container"> {/* Link Interno na Index */}
                          <img src="https://github.com/Aracebe/advogadalilian/blob/content/logo_gold.svg?raw=true" alt="Lilian R. Paoliello Logo" class="logo-image">
                      </a>
                     <div class="footer-brand-name">Lilian R. Paoliello</div>
@@ -174,14 +183,14 @@
                 <div class="footer-column">
                     <h4>Navegação</h4>
                     <ul class="quick-links-list">
-                         <li><a href="#home">Início</a></li>
+                         <li><a href="#home">Início</a></li> {/* Links Internos */}
                          <li><a href="#area-execucao-penal">Execução Penal</a></li>
                          <li><a href="#area-extrajudicial">Adv. Extrajudicial</a></li>
                          <li><a href="#area-licitacoes">Licitações</a></li>
                          <li><a href="#area-pad">PAD</a></li>
                          <li><a href="#sobre">Quem Sou</a></li>
-                         <li><a href="#blog">Blog</a></li>
-                         <li><a href="#contato">Contato</a></li>
+                         <li><a href="blog.html">Blog</a></li> {/* Link Externo */}
+                         <li><a href="#contato">Contato</a></li> {/* Link Interno */}
                     </ul>
                 </div>
                 <div class="footer-column">
