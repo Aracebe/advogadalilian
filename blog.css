@@ -1,0 +1,357 @@
+/* --- START OF FILE blog.css --- */
+
+/* === ESTILOS ESPECÍFICOS PÁGINA LISTAGEM (blog.html) === */
+.blog-hero {
+    padding: 50px 0 40px; /* Menor padding que uma section normal */
+    background-color: var(--color-section-alt); /* Fundo sutil */
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+.blog-hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    color: var(--color-primary);
+    font-family: var(--font-secondary);
+}
+.blog-hero p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.blog-layout {
+    padding: 60px 0; /* Espaçamento da área principal do blog */
+}
+
+.blog-main-content { /* Usado em blog.html e post-detalhe.html */
+    display: flex;
+    gap: 45px; /* Espaço entre posts e sidebar */
+}
+
+.blog-posts-list {
+    flex: 1; /* Ocupa o espaço restante */
+}
+
+.blog-post-item {
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 45px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    overflow: hidden; /* Garante que a imagem não vaze */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.blog-post-item:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.09);
+}
+
+.blog-post-item img {
+    width: 100%;
+    height: 300px; /* Altura fixa para a imagem do post */
+    object-fit: cover;
+    display: block;
+}
+
+.blog-post-content {
+    padding: 30px;
+}
+
+.post-meta { /* Usado na lista e no detalhe (com classe diferente no detalhe) */
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 10px;
+    display: block; /* Para ficar acima do título */
+    font-family: var(--font-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.post-meta .date::after {
+    content: '•';
+    margin: 0 8px;
+}
+
+.blog-post-content h3 { /* Título do post na lista */
+    font-size: 1.7rem; /* Usa H3, mas com tamanho específico */
+    margin-bottom: 15px;
+    font-family: var(--font-secondary);
+    color: var(--color-primary);
+}
+.blog-post-content h3 a {
+    color: inherit; /* Herda a cor preta */
+}
+ .blog-post-content h3 a:hover {
+    color: var(--color-secondary); /* Muda para a cor secundária no hover */
+}
+
+.post-excerpt p {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.read-more-link { /* Estilo do link "Leia Mais" */
+     color: var(--color-secondary);
+     font-weight: 700;
+     text-decoration: none;
+     font-size: 0.9rem;
+}
+.read-more-link:hover {
+     color: #cea870;
+     text-decoration: underline;
+}
+
+/* === SIDEBAR (Usada em blog.html e post-detalhe.html) === */
+.blog-sidebar {
+    flex: 0 0 300px; /* Largura fixa da sidebar */
+}
+
+.sidebar-widget {
+    margin-bottom: 40px;
+    padding: 25px;
+    background-color: var(--color-section-alt);
+    border-radius: 5px;
+    border-left: 3px solid var(--color-secondary);
+}
+.sidebar-widget h4 { /* Títulos da Sidebar */
+     font-size: 1.1rem; /* Sobrescreve H4 geral */
+     margin-bottom: 20px;
+     padding-bottom: 10px;
+     border-bottom: 1px solid #ddd;
+     color: var(--color-primary);
+     font-family: var(--font-primary); /* Usar Montserrat para títulos de widget */
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 1px;
+}
+
+/* Search Widget */
+.search-form {
+    display: flex;
+}
+.search-form input[type="search"] {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px 0 0 3px;
+    font-size: 0.9rem;
+    font-family: var(--font-primary);
+}
+.search-form button {
+    padding: 10px 15px;
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    border: 1px solid var(--color-secondary);
+    border-left: none;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.search-form button:hover {
+    background-color: #cea870;
+}
+
+/* Category/Recent Posts List */
+.category-list ul, .recent-posts-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.category-list li, .recent-posts-list li {
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #eee; /* Linha sutil entre itens */
+    padding-bottom: 10px;
+}
+ .category-list li:last-child, .recent-posts-list li:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.category-list a, .recent-posts-list a {
+    color: var(--color-text-dark);
+    font-size: 0.95rem;
+    transition: color 0.3s ease, padding-left 0.3s ease;
+    display: block; /* Para ocupar a linha toda */
+}
+.category-list a:hover, .recent-posts-list a:hover {
+    color: var(--color-secondary);
+    padding-left: 5px; /* Efeito sutil no hover */
+}
+
+/* === ESTILOS PÁGINA DETALHE DO POST (post-detalhe.html) === */
+.post-layout {
+    padding: 60px 0; /* Padding da área principal */
+}
+/* .blog-main-content reutilizado para estrutura flex */
+
+.post-full { /* Container do artigo principal */
+    flex: 1; /* Ocupa espaço restante */
+    background-color: #fff; /* Fundo branco para o artigo */
+    padding: 35px 40px; /* Espaçamento interno do artigo */
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05); /* Sombra sutil */
+}
+
+.post-full-header {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.post-full-header h1 { /* Título principal do artigo */
+    font-size: 2.6rem; /* Ligeiramente menor que H2 geral */
+    font-family: var(--font-secondary);
+    color: var(--color-primary);
+    line-height: 1.2;
+    margin-bottom: 15px; /* Espaço abaixo do título */
+}
+
+.post-full-meta { /* Data e Categoria no detalhe*/
+    font-size: 0.9rem;
+    color: #777;
+    font-family: var(--font-primary);
+}
+.post-full-meta .date::after { /* Reutiliza estilo de .post-meta */
+    content: '•';
+    margin: 0 10px;
+}
+ .post-full-meta .category a {
+     color: #555;
+     text-transform: uppercase;
+     font-weight: 500;
+     letter-spacing: 0.5px;
+ }
+ .post-full-meta .category a:hover {
+     color: var(--color-secondary);
+ }
+
+.post-full-image { /* Imagem destacada */
+    margin: 0 -40px 35px -40px; /* Faz imagem ocupar largura total do .post-full */
+}
+.post-full-image img {
+     width: 100%;
+     height: auto; /* Altura automática */
+     max-height: 450px; /* Limita altura máxima */
+     object-fit: cover;
+}
+
+.post-full-content { /* Área do conteúdo do artigo */
+    font-size: 1.05rem; /* Tamanho de fonte ligeiramente maior para leitura */
+    line-height: 1.8; /* Espaçamento entre linhas maior */
+    color: var(--color-text-dark);
+}
+
+.post-full-content p {
+    margin-bottom: 1.5em; /* Mais espaço entre parágrafos */
+}
+
+.post-full-content h2,
+.post-full-content h3,
+.post-full-content h4 { /* Subtítulos dentro do artigo */
+    margin-top: 2.2em;
+    margin-bottom: 0.8em;
+    line-height: 1.3;
+}
+.post-full-content h2 { font-size: 1.8rem; } /* Sobrescreve H2 geral */
+.post-full-content h3 { font-size: 1.5rem; } /* Sobrescreve H3 geral */
+.post-full-content h4 { font-size: 1.2rem; font-family: var(--font-primary); font-weight: 700; color: #444; } /* Sobrescreve H4 geral */
+
+.post-full-content ul,
+.post-full-content ol {
+    margin-bottom: 1.5em;
+    padding-left: 1.8em; /* Indentação padrão */
+}
+.post-full-content li {
+    margin-bottom: 0.6em;
+}
+.post-full-content ul { list-style: disc; }
+.post-full-content ol { list-style: decimal; }
+
+.post-full-content blockquote {
+    border-left: 4px solid var(--color-secondary);
+    padding: 15px 25px;
+    margin: 2.5em 0;
+    background-color: var(--color-section-alt);
+    font-style: italic;
+    color: #555;
+    font-size: 1.1rem; /* Citação um pouco maior */
+}
+.post-full-content blockquote p {
+     margin-bottom: 0; /* Remove margem do parágrafo dentro da citação */
+}
+
+.post-full-content a { /* Links dentro do conteúdo */
+    color: var(--color-secondary);
+    text-decoration: underline;
+    text-decoration-color: rgba(179, 161, 125, 0.4);
+    transition: color 0.3s ease, text-decoration-color 0.3s ease;
+}
+.post-full-content a:hover {
+    color: #cea870;
+    text-decoration-color: #cea870;
+}
+
+/* Imagens dentro do conteúdo */
+.post-full-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 30px auto; /* Centraliza e dá espaço */
+    display: block;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+
+/* === MEDIA QUERIES (Apenas para Blog/Post) === */
+@media (max-width: 992px) {
+    /* Empilha conteúdo e sidebar */
+    .blog-main-content {
+        flex-direction: column;
+    }
+    .blog-sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        margin-top: 40px;
+    }
+    .blog-post-item img { height: 250px; } /* Lista de posts */
+    .post-full-header h1 { font-size: 2.3rem; } /* Título do post */
+}
+
+@media (max-width: 768px) {
+    /* Ajustes de padding específicos do blog */
+     .blog-hero { padding: 40px 0 30px; }
+     .blog-layout { padding: 40px 0; }
+     .post-layout { padding: 40px 0; }
+
+     /* Outros ajustes blog mobile */
+     .blog-hero h1 { font-size: 2.2rem; }
+     .blog-hero p { font-size: 1rem; }
+     .blog-post-item img { height: 200px; }
+     .blog-post-content h3 { font-size: 1.5rem; } /* Título na lista */
+     .blog-post-content { padding: 20px 15px; } /* Padding do card na lista */
+     .post-full { padding: 25px 20px; } /* Padding interno do post */
+     .post-full-header h1 { font-size: 2rem; } /* Título do post */
+     .post-full-image { margin: 0 -20px 30px -20px; } /* Ajusta margem negativa da imagem */
+     .post-full-content { font-size: 1rem; line-height: 1.7; } /* Ajusta fonte para mobile */
+     .post-full-content h2 { font-size: 1.6rem; }
+     .post-full-content h3 { font-size: 1.4rem; }
+     .post-full-content blockquote { font-size: 1rem; padding: 10px 15px; margin: 2em 0; }
+}
+
+ @media (max-width: 480px) {
+    /* Ajustes de padding mobile pequeno */
+     .blog-hero { padding: 30px 0 20px; }
+     .blog-layout { padding: 25px 0; }
+     .post-layout { padding: 25px 0; }
+
+     /* Outros ajustes blog mobile pequeno */
+     .blog-hero h1 { font-size: 1.8rem; }
+     .blog-post-item img { height: 180px; }
+     .blog-post-content { padding: 15px 10px; } /* Padding do card na lista */
+     .post-full { padding: 20px 15px; } /* Padding interno do post */
+     .post-full-header h1 { font-size: 1.7rem; } /* Título do post */
+     .post-full-image { margin: 0 -15px 25px -15px; } /* Ajusta margem negativa */
+ }
+/* --- END OF FILE blog.css --- */
