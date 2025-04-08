@@ -1,3 +1,4 @@
+--- START OF FILE style.css ---
 :root {
     --color-primary: #000000;
     --color-secondary: #b3a17d;
@@ -25,7 +26,7 @@ h2::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: tr
 h3 { font-size: 1.9rem; color: var(--color-primary); margin-bottom: 20px; }
 h4 { font-family: var(--font-primary); font-weight: 700; font-size: 1.25rem; color: var(--color-secondary); margin-bottom: 15px; }
 p { margin-bottom: 1rem; color: #555; }
-section { padding: 90px 0; overflow: hidden; } /* Padding padrão */
+section { padding: 70px 0; overflow: hidden; } /* Redução do padding desktop de 90px para 70px */
 .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; }
 .text-center { text-align: center; }
 .btn { display: inline-block; padding: 14px 30px; background-color: var(--color-secondary); color: var(--color-primary); border: 2px solid var(--color-secondary); border-radius: 5px; font-weight: 700; text-transform: uppercase; transition: all 0.3s ease; cursor: pointer; font-family: var(--font-primary); letter-spacing: 0.5px; }
@@ -256,8 +257,9 @@ section { padding: 90px 0; overflow: hidden; } /* Padding padrão */
     h3 { font-size: 1.7rem; }
     .slide-content h1 { font-size: 2.4rem; }
     .slide-content p { font-size: 1.05rem; }
-    /* Ajuste de padding para section aqui também, se desejar */
-    /* section { padding: 75px 0; } */
+    section:not(#home) { /* Ajuste para telas maiores que 768px, se necessário */
+         padding: 60px 0; /* Ou outro valor, para desktop pode ser um pouco mais que mobile */
+     }
     .area-section .container { flex-direction: column !important; gap: 30px; align-items: stretch; }
     .area-image { max-width: 80%; margin: 0 auto 30px auto; height: auto;}
     .area-image img { height: auto; max-height: 350px; }
@@ -317,7 +319,7 @@ section { padding: 90px 0; overflow: hidden; } /* Padding padrão */
      h3 { font-size: 1.5rem; }
      /* --- AJUSTE DE ESPAÇAMENTO ENTRE SEÇÕES --- */
      section:not(#home) { /* Aplica a todas as seções, exceto #home */
-         padding: 60px 0; /* Reduzido de 90px para 60px no top/bottom */
+         padding: 50px 0; /* Reduzido para 50px no top/bottom para mobile e telas menores */
      }
      /* --- FIM DO AJUSTE --- */
      /* .area-section não precisa mais de padding, pois está na section */
@@ -357,7 +359,7 @@ section { padding: 90px 0; overflow: hidden; } /* Padding padrão */
       h3 { font-size: 1.3rem; }
        /* --- AJUSTE ADICIONAL PARA TELAS MUITO PEQUENAS --- */
       section:not(#home) {
-          padding: 45px 0; /* Reduzido ainda mais para 45px no top/bottom */
+          padding: 40px 0; /* Reduzido ainda mais para 40px no top/bottom para telas muito pequenas */
       }
       /* --- FIM DO AJUSTE --- */
       .area-content { padding: 15px 10px; }
@@ -375,3 +377,4 @@ section { padding: 90px 0; overflow: hidden; } /* Padding padrão */
       .footer-contact-list li { font-size: 0.9rem; }
       .quick-links-list a { font-size: 0.9rem; }
  }
+--- END OF FILE style.css ---
