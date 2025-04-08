@@ -25,7 +25,7 @@ h2::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: tr
 h3 { font-size: 1.9rem; color: var(--color-primary); margin-bottom: 20px; }
 h4 { font-family: var(--font-primary); font-weight: 700; font-size: 1.25rem; color: var(--color-secondary); margin-bottom: 15px; }
 p { margin-bottom: 1rem; color: #555; }
-section { padding: 90px 0; overflow: hidden; }
+section { padding: 90px 0; overflow: hidden; } /* Padding padrão */
 .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; }
 .text-center { text-align: center; }
 .btn { display: inline-block; padding: 14px 30px; background-color: var(--color-secondary); color: var(--color-primary); border: 2px solid var(--color-secondary); border-radius: 5px; font-weight: 700; text-transform: uppercase; transition: all 0.3s ease; cursor: pointer; font-family: var(--font-primary); letter-spacing: 0.5px; }
@@ -94,7 +94,7 @@ section { padding: 90px 0; overflow: hidden; }
 /* --- FIM LOGO STYLES --- */
 
 /* --- SLIDER --- */
-#home { height: 70vh; min-height: 500px; position: relative; overflow: hidden; padding: 0; background-color: var(--color-primary); }
+#home { height: 70vh; min-height: 500px; position: relative; overflow: hidden; padding: 0; background-color: var(--color-primary); } /* padding: 0 aqui mantém o slider full */
 .slider-container { height: 100%; position: relative; }
 .slides-wrapper {
     display: flex;
@@ -135,7 +135,7 @@ section { padding: 90px 0; overflow: hidden; }
 .slider-arrow.next { right: 30px; }
 
 /* --- SEÇÕES DE ÁREA --- */
-.area-section { display: flex; align-items: center; gap: 60px; margin-bottom: 0; padding: 90px 0; }
+.area-section { display: flex; align-items: center; gap: 60px; margin-bottom: 0; /* padding já está na tag section global */ }
 .area-section:nth-child(odd) { background-color: var(--color-section-alt); }
 .area-section:nth-child(even) { background-color: var(--color-background); }
 .area-section .container { display: flex; align-items: center; gap: 60px; width: 100%; }
@@ -151,7 +151,7 @@ section { padding: 90px 0; overflow: hidden; }
 .area-content .btn { margin-top: 15px; }
 
 /* --- SOBRE --- */
-#sobre { background-color: var(--color-background); padding: 100px 0; }
+#sobre { background-color: var(--color-background); /* padding já está na tag section global */ }
 .about-content { display: flex; align-items: center; gap: 50px; }
 .about-image {
     flex: 0 0 35%;
@@ -178,7 +178,7 @@ section { padding: 90px 0; overflow: hidden; }
 .about-text .btn { margin-top: 25px; }
 
 /* --- BLOG --- */
-#blog { background-color: var(--color-section-alt); }
+#blog { background-color: var(--color-section-alt); /* padding já está na tag section global */ }
 .blog-preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 35px; margin-bottom: 50px; }
 .post-preview { background-color: var(--color-background); border-radius: 8px; overflow: hidden; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; }
 .post-preview:hover { transform: translateY(-6px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
@@ -256,6 +256,8 @@ section { padding: 90px 0; overflow: hidden; }
     h3 { font-size: 1.7rem; }
     .slide-content h1 { font-size: 2.4rem; }
     .slide-content p { font-size: 1.05rem; }
+    /* Ajuste de padding para section aqui também, se desejar */
+    /* section { padding: 75px 0; } */
     .area-section .container { flex-direction: column !important; gap: 30px; align-items: stretch; }
     .area-image { max-width: 80%; margin: 0 auto 30px auto; height: auto;}
     .area-image img { height: auto; max-height: 350px; }
@@ -313,7 +315,12 @@ section { padding: 90px 0; overflow: hidden; }
      .slider-arrow { width: 45px; height: 45px; padding: 12px; font-size: 1.3rem;}
      h2 { font-size: 1.7rem; margin-bottom: 40px;}
      h3 { font-size: 1.5rem; }
-     section { padding: 70px 0; }
+     /* --- AJUSTE DE ESPAÇAMENTO ENTRE SEÇÕES --- */
+     section:not(#home) { /* Aplica a todas as seções, exceto #home */
+         padding: 60px 0; /* Reduzido de 90px para 60px no top/bottom */
+     }
+     /* --- FIM DO AJUSTE --- */
+     /* .area-section não precisa mais de padding, pois está na section */
      .area-image { max-width: 90%; height: auto;}
      .area-image img { max-height: 300px; }
      .area-content { padding: 20px 15px; }
@@ -348,6 +355,11 @@ section { padding: 90px 0; overflow: hidden; }
       .slider-dot.active { width: 22px; }
       h2 { font-size: 1.5rem; }
       h3 { font-size: 1.3rem; }
+       /* --- AJUSTE ADICIONAL PARA TELAS MUITO PEQUENAS --- */
+      section:not(#home) {
+          padding: 45px 0; /* Reduzido ainda mais para 45px no top/bottom */
+      }
+      /* --- FIM DO AJUSTE --- */
       .area-content { padding: 15px 10px; }
       .post-content { padding: 15px 10px; }
       .about-image { max-width: 80%; }
